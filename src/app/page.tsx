@@ -1,5 +1,6 @@
 "use client";
 
+import { playShake, playClick } from "@/utils/audio";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -268,6 +269,7 @@ export default function Home() {
   );
 
   const handleChangeArea = useCallback(() => {
+    playClick();
     setShowSelector(true);
     setPhase("selecting");
     setShowReveal(false);
@@ -285,6 +287,7 @@ export default function Home() {
 
     isDrawingRef.current = true;
     setPhase("drawing");
+    playShake();
 
     // Snapshot at draw-time for closure safety
     const snapshot: BucketState = {
@@ -561,14 +564,14 @@ export default function Home() {
                               damping: 20,
                               delay: idx * 0.03,
                             }}
-                            className={`w-8 h-8 rounded-md flex items-center justify-center text-[10px] font-bold border ${
+                            className={`px-2 h-8 rounded-md flex items-center justify-center text-[10.5px] font-bold border ${
                               draw.type === "red"
                                 ? "bg-red-950/80 border-red-700/60 text-red-400"
                                 : "bg-zinc-800/80 border-zinc-600/60 text-zinc-400"
                             }`}
                             title={draw.type === "red" ? "ใบแดง" : "ใบดำ"}
                           >
-                            {draw.type === "red" ? "แ" : "ด"}
+                            {draw.type === "red" ? "แดง" : "ดำ"}
                           </motion.div>
                         ))}
                       </div>

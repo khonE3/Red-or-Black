@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { playClick } from "@/utils/audio";
 import {
   MapPin,
   ChevronRight,
@@ -120,6 +121,7 @@ export default function ProvinceSelector({
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const handleProvinceSelect = (province: Province) => {
+    playClick();
     setLocalProvince(province);
     setLocalDistrict(null);
     setStep("district");
@@ -127,6 +129,7 @@ export default function ProvinceSelector({
   };
 
   const handleDistrictSelect = (district: District) => {
+    playClick();
     setLocalDistrict(district);
     setIsChanging(false);
   };
@@ -138,6 +141,7 @@ export default function ProvinceSelector({
   };
 
   const handleChange = () => {
+    playClick();
     setIsChanging(true);
     setStep("province");
     setSearch("");
@@ -145,12 +149,14 @@ export default function ProvinceSelector({
   };
 
   const handleConfirmStart = () => {
+    playClick();
     if (localProvince && localDistrict) {
       onSelect(localProvince, localDistrict);
     }
   };
 
   const handleConfirmCustom = () => {
+    playClick();
     const total = parseInt(customTotal) || 0;
     const red = parseInt(customRed) || 0;
 
@@ -328,15 +334,15 @@ export default function ProvinceSelector({
       {/* ── Mode Toggle ── */}
       <div className="flex bg-black/40 rounded-xl p-1.5 border border-white/10 mb-4 backdrop-blur-md">
         <button
-          onClick={() => setMode("real")}
+          onClick={() => { playClick(); setMode("real"); }}
           className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-200 ${
             mode === "real" ? "bg-white/15 text-white shadow text-red-50" : "text-white/40 hover:text-white/70"
           }`}
         >
-          อิงข้อมูลจริง
+          อิงข้อมูลจำลอง
         </button>
         <button
-          onClick={() => setMode("custom")}
+          onClick={() => { playClick(); setMode("custom"); }}
           className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-200 ${
             mode === "custom" ? "bg-white/15 text-white shadow" : "text-white/40 hover:text-white/70"
           }`}

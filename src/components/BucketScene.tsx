@@ -524,19 +524,16 @@ function HistoryStrip({ history }: { history: DrawResult[] }) {
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.4 }}
               transition={{ type: "spring", stiffness: 400, damping: 28 }}
-              className={`relative w-6 h-6 rounded-md border flex items-center justify-center shrink-0 ${
+              className={`relative px-2 h-6 rounded-md border flex items-center justify-center shrink-0 ${
                 draw.type === "red"
                   ? "bg-red-700/80 border-red-500/50"
                   : "bg-zinc-800/80 border-zinc-600/40"
               }`}
               title={draw.type === "red" ? "ใบแดง" : "ใบดำ"}
             >
-              {/* Inner marker dot */}
-              <div
-                className={`w-2 h-2 rounded-full ${
-                  draw.type === "red" ? "bg-red-300/70" : "bg-zinc-400/50"
-                }`}
-              />
+              <span className={`text-[9px] font-bold ${draw.type === "red" ? "text-red-100" : "text-white"}`}>
+                {draw.type === "red" ? "แดง" : "ดำ"}
+              </span>
               {/* Recency fade: newest (i=0) is fully opaque */}
               <div
                 className="absolute inset-0 rounded-md bg-black pointer-events-none"
