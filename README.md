@@ -1,36 +1,178 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎖️ Red or Black Destiny — ระบบจำลองการเกณฑ์ทหาร
 
-## Getting Started
+> ระบบจำลองการจับสลากเกณฑ์ทหารของประเทศไทย สร้างขึ้นด้วย **Next.js 16** และ **Tailwind CSS v4**  
+> สำหรับการศึกษาและทำความเข้าใจกระบวนการสุ่มเกณฑ์ทหารอย่างโปร่งใส
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📌 ภาพรวมโปรเจกต์
+
+**Red or Black Destiny** คือแอปพลิเคชันจำลองการเกณฑ์ทหาร (Military Conscription Simulation) ที่ช่วยให้ผู้ใช้สามารถ:
+
+- **เลือกจังหวัดและอำเภอ** เพื่อดูข้อมูลโควตาการเกณฑ์ทหารในพื้นที่นั้น ๆ
+- **จำลองการล้วงสลาก** แบบ Real-time พร้อม Animation สุดเร้าใจ
+- **ดูสถิติและโอกาส** ของใบแดง (เกณฑ์) และใบดำ (ได้รับการยกเว้น) แบบ Live
+- **กำหนดโควตาเอง** เพื่อทดสอบหรือจำลองสถานการณ์อื่น ๆ
+
+> ⚠️ ข้อมูลในระบบนี้เป็น **ข้อมูลจำลอง** ไม่ใช่ข้อมูลจริงจากกองทัพบก
+
+---
+
+## ✨ ฟีเจอร์หลัก
+
+### 🗺️ เลือกพื้นที่
+- รองรับ **13 จังหวัด** (กรุงเทพฯ, เชียงใหม่, ขอนแก่น, อุดรธานี, นครราชสีมา, ชลบุรี, ระยอง ฯลฯ)
+- ค้นหาจังหวัดและอำเภอได้ทันที
+- โหมด **อิงข้อมูลจำลอง** สำหรับข้อมูลพื้นที่จริง
+- โหมด **กำหนดโควตาเอง** สำหรับทดสอบเองอิสระ
+
+### 🪣 จำลองการจับสลาก
+- Animation ถังสลากสมจริงพร้อมสลิปเด้งออกมา
+- เสียง **เขย่าถัง** เวลากดจับสลาก
+- แสดงผล **ใบแดง / ใบดำ** พร้อม Animation เฉลิมฉลอง/ตกใจ
+- ติดตาม **ประวัติการจับสลาก** รอบนี้แบบ Real-time
+
+### 📊 แสดงสถิติ
+- วงกลมแสดง **โอกาสได้ใบแดง** (%) แบบ Animated Gauge
+- **กราฟแท่งแบ่งส่วน** ใบแดง vs ใบดำ ที่เหลืออยู่
+- **สถิติระดับชาติ** จากระบบ API พร้อม Auto-refresh ทุก 12 วินาที
+
+### 🎨 UI/UX
+- ดีไซน์แบบ **Dark Mode / Glassmorphism** โทนสีทองแดง
+- ฟอนต์ **Inter + Noto Sans Thai** เพื่อรองรับภาษาไทยสวยงาม
+- **Responsive Design** รองรับทั้ง Desktop และ Mobile
+- เสียง **Click Effect** เวลากดปุ่มเมนูต่าง ๆ (Web Audio API)
+- **Floating Action Button** กลับหน้าแรกได้ทุกเมื่อ
+- คลิกที่ **โลโก้โล่** ใน Header เพื่อกลับหน้าเลือกพื้นที่
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | [Next.js 16](https://nextjs.org/) (App Router) |
+| Language | TypeScript 5 |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com/) |
+| Animation | [Framer Motion 12](https://www.framer.com/motion/) |
+| Icons | [Lucide React](https://lucide.dev/) |
+| Sound FX | Web Audio API (ไม่ใช้ไฟล์เสียงภายนอก) |
+| Package Manager | [Bun](https://bun.sh/) |
+| Deployment | [Vercel](https://vercel.com/) |
+
+---
+
+## 🗂️ โครงสร้างโปรเจกต์
+
+```
+Red-or-Black/
+├── src/
+│   ├── app/
+│   │   ├── api/stats/          # API endpoint สถิติระดับชาติ
+│   │   ├── layout.tsx          # Root layout + metadata + favicon
+│   │   └── page.tsx            # หน้าหลัก (game controller)
+│   ├── components/
+│   │   ├── Header.tsx          # Header bar + นาฬิกา + โลโก้
+│   │   ├── ProvinceSelector.tsx # ระบบเลือกจังหวัด/อำเภอ
+│   │   ├── BucketScene.tsx     # ถังสลาก + ปุ่มล้วง + ประวัติ
+│   │   ├── OddsDisplay.tsx     # กราฟโอกาส + วงเกจ + สถิติ
+│   │   ├── SlipReveal.tsx      # Animation เฉลิมฉลองผลจับ
+│   │   └── StatsBoard.tsx      # สถิติระดับชาติ
+│   ├── data/
+│   │   └── provinces.ts        # ฐานข้อมูลจังหวัดและอำเภอ
+│   ├── types/                  # TypeScript type definitions
+│   ├── utils/
+│   │   └── audio.ts            # Web Audio API utilities
+│   └── lib/                    # Helper functions
+├── public/
+│   └── icon.svg                # Favicon
+├── vercel.json                 # Vercel deploy config
+└── package.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 เริ่มต้นใช้งาน (Local Development)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### ความต้องการของระบบ
+- [Node.js](https://nodejs.org/) >= 18 หรือ [Bun](https://bun.sh/) >= 1.0
 
-## Learn More
+### ติดตั้งและรัน
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Clone โปรเจกต์
+git clone https://github.com/your-username/Red-or-Black.git
+cd Red-or-Black
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# ติดตั้ง dependencies
+bun install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# รัน dev server (port 3001)
+bun run dev
+```
 
-## Deploy on Vercel
+จากนั้นเปิดเบราว์เซอร์ไปที่ [http://localhost:3001](http://localhost:3001)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ☁️ การ Deploy ขึ้น Vercel
+
+โปรเจกต์นี้มี `vercel.json` ที่ตั้งค่าพร้อมแล้ว:
+
+```json
+{
+  "version": 2,
+  "framework": "nextjs",
+  "installCommand": "bun install",
+  "buildCommand": "bun run build"
+}
+```
+
+### วิธี Deploy
+
+1. Push โค้ดขึ้น GitHub
+2. ไปที่ [vercel.com](https://vercel.com) และ Import Repository
+3. กด **Deploy** ได้เลย — Vercel จะอ่านค่าจาก `vercel.json` อัตโนมัติ
+
+---
+
+## 📍 ข้อมูลจังหวัดที่รองรับ
+
+| จังหวัด | จำนวนอำเภอในระบบ |
+|---|---|
+| กรุงเทพมหานคร | 7 |
+| เชียงใหม่ | 6 |
+| ขอนแก่น | 6 |
+| อุดรธานี | 6 |
+| นครราชสีมา | 7 |
+| ชลบุรี | 9 |
+| ระยอง | 5 |
+| อุบลราชธานี | 5 |
+| สงขลา | 5 |
+| นครศรีธรรมราช | 5 |
+| ลำพูน | 4 |
+| ชุมพร | 4 |
+| พัทลุง | 4 |
+
+---
+
+## ⚠️ ข้อจำกัดและข้อควรทราบ
+
+- ข้อมูลทั้งหมดในระบบเป็น **ข้อมูลจำลอง** ไม่ใช่ข้อมูลจริงจากกองทัพบก
+- ตัวเลขโควตาและจำนวนผู้เข้ารับการตรวจเป็นการประมาณการเพื่อการศึกษาเท่านั้น
+- ยังไม่มี Public API จากกองทัพบกไทยให้ดึงข้อมูลจริงแบบ Real-time
+
+---
+
+## 🤝 Contributing
+
+ยินดีรับ Pull Requests สำหรับ:
+- เพิ่มข้อมูลจังหวัดและอำเภอที่ยังขาดอยู่
+- ปรับปรุง UX/UI
+- แก้ไข Bug ต่าง ๆ
+
+---
+
+## 📄 License
+
+MIT License — สร้างขึ้นเพื่อการศึกษาและทดสอบ ไม่มีวัตถุประสงค์เชิงพาณิชย์
