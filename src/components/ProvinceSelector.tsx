@@ -92,6 +92,10 @@ export default function ProvinceSelector({
     selectedDistrict,
   );
   const [isChanging, setIsChanging] = useState(false);
+  
+  const [mode, setMode] = useState<"real" | "custom">("real");
+  const [customTotal, setCustomTotal] = useState<string>("200");
+  const [customRed, setCustomRed] = useState<string>("50");
 
   // ── Derived state ──────────────────────────────────────────────────────────
   const showSummary =
@@ -146,6 +150,29 @@ export default function ProvinceSelector({
     }
   };
 
+  const handleConfirmCustom = () => {
+    const total = parseInt(customTotal) || 0;
+    const red = parseInt(customRed) || 0;
+
+    if (total <= 0) return alert("โปรดระบุผู้เข้ารับการตรวจมากกว่า 0 คน");
+    if (red < 0 || red > total) return alert("โควตาใบแดงต้องไม่เกินจำนวนผู้เข้ารับการตรวจ");
+
+    const customProv: Province = {
+      id: "custom-p",
+      nameTh: "กำหนดเอง",
+      nameEn: "Custom Mode",
+      districts: [],
+    };
+    const customDist: District = {
+      id: "custom-d",
+      nameTh: "โควตาพิเศษ",
+      nameEn: "Custom Quota",
+      eligibleCount: total,
+      quota: red,
+    };
+    onSelect(customProv, customDist);
+  };
+
   // ── Summary calculations ───────────────────────────────────────────────────
   const summaryData = useMemo(() => {
     if (!localDistrict) return null;
@@ -194,9 +221,10 @@ export default function ProvinceSelector({
               </div>
               <button
                 onClick={handleChange}
-                className="text-white/35 hover:text-white/70 text-xs border border-white/10 hover:border-white/25 rounded-lg px-2.5 py-1.5 transition-all duration-200 shrink-0"
+                className="flex items-center gap-1 text-white/90 font-medium hover:text-white bg-white/15 hover:bg-white/25 text-xs border border-white/20 hover:border-white/40 rounded-lg px-3 py-1.5 transition-all duration-200 shrink-0 shadow-md shadow-black/50 active:scale-95"
               >
-                เปลี่ยน
+                <ArrowLeft className="w-3 h-3" />
+                เปลี่ยนที่
               </button>
             </div>
 
@@ -297,8 +325,35 @@ export default function ProvinceSelector({
   // ─────────────────────────────────────────────────────────────────────────
   return (
     <div className="w-full max-w-md mx-auto">
-      {/* Outer glass panel */}
-      <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-2xl shadow-2xl overflow-hidden">
+      {/* ── Mode Toggle ── */}
+      <div className="flex bg-black/40 rounded-xl p-1.5 border border-white/10 mb-4 backdrop-blur-md">
+        <button
+          onClick={() => setMode("real")}
+          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-200 ${
+            mode === "real" ? "bg-white/15 text-white shadow text-red-50" : "text-white/40 hover:text-white/70"
+          }`}
+        >
+          อิงข้อมูลจริง
+        </button>
+        <button
+          onClick={() => setMode("custom")}
+          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-200 ${
+            mode === "custom" ? "bg-white/15 text-white shadow" : "text-white/40 hover:text-white/70"
+          }`}
+        >
+          กำหนดโควตาเอง
+        </button>
+      </div>
+
+      <AnimatePresence mode="popLayout">
+        {mode === "real" ? (
+          <motion.div
+            key="real-mode"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-2xl shadow-2xl overflow-hidden"
+          >
         {/* Panel header */}
         <div className="px-5 pt-5 pb-3 border-b border-white/8">
           <AnimatePresence mode="wait">
@@ -481,7 +536,59 @@ export default function ProvinceSelector({
             )}
           </AnimatePresence>
         </div>
-      </div>
+      </motion.div>
+      ) : (
+        <motion.div
+           key="custom-mode"
+           initial={{ opacity: 0, x: 10 }}
+           animate={{ opacity: 1, x: 0 }}
+           exit={{ opacity: 0, x: 10 }}
+           className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-2xl shadow-2xl overflow-hidden p-6"
+        >
+          <div className="text-center mb-6 mt-2">
+            <h2 className="text-xl font-bold text-white mb-2">จำลองโควตาเอง</h2>
+            <p className="text-white/40 text-sm">ระบุจำนวนคนและสลากแดงเพื่อทดสอบระบบดึงสลาก</p>
+          </div>
+          
+          <div className="space-y-4 mb-8">
+            <div>
+              <label className="block text-white/70 text-sm mb-1.5 font-medium ml-1">จำนวนผู้เข้ารับการตรวจ (คน)</label>
+              <input
+                type="number"
+                min="1"
+                value={customTotal}
+                onChange={(e) => setCustomTotal(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-lg font-bold focus:outline-none focus:border-red-500/40 focus:bg-white/10 transition-all text-center"
+              />
+            </div>
+            <div>
+               <label className="block text-red-400/80 text-sm mb-1.5 font-medium ml-1">โควตาใบแดง (ใบ)</label>
+               <input
+                type="number"
+                min="0"
+                value={customRed}
+                onChange={(e) => setCustomRed(e.target.value)}
+                className="w-full bg-red-950/20 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-lg font-bold focus:outline-none focus:border-red-500/40 focus:bg-red-950/30 transition-all text-center"
+               />
+               {parseInt(customTotal) > 0 && (
+                 <p className="text-center text-xs text-red-500/60 mt-2">
+                   โอกาสได้ใบแดง: {((parseInt(customRed) || 0) / (parseInt(customTotal) || 1) * 100).toFixed(1)}%
+                 </p>
+               )}
+            </div>
+          </div>
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={handleConfirmCustom}
+            className="w-full py-4 rounded-xl font-bold text-white text-base bg-linear-to-r from-red-800 to-red-600 shadow-lg flex items-center justify-center gap-2 border border-red-500/30"
+          >
+            <Target className="w-5 h-5" /> ตกลงทดสอบสลาก
+          </motion.button>
+        </motion.div>
+      )}
+      </AnimatePresence>
 
       {/* Breadcrumb hint */}
       <motion.p

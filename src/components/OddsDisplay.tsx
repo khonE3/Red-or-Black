@@ -388,8 +388,7 @@ export default function OddsDisplay({
                 <div className="relative">
                   <CircularOdds blackOdds={blackOdds} redOdds={redOdds} size={148} />
                   {/* Center overlay */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center"
-                       style={{ transform: 'rotate(90deg) scaleX(-1)' }}>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <span className="text-[10px] text-zinc-600 uppercase tracking-widest leading-none">
                       รวม
                     </span>

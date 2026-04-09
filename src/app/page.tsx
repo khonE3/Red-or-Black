@@ -8,6 +8,7 @@ import {
   ChevronDown,
   ChevronUp,
   RefreshCw,
+  Home as HomeIcon,
 } from "lucide-react";
 
 import Header from "@/components/Header";
@@ -375,7 +376,7 @@ export default function Home() {
 
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div className="relative z-10">
-        <Header />
+        <Header onHomeClick={handleChangeArea} />
       </div>
 
       {/* ── Main content ────────────────────────────────────────────────── */}
@@ -612,6 +613,26 @@ export default function Home() {
           ไม่ใช่ระบบทางการ
         </p>
       </footer>
+
+      {/* ── Floating Home Button ─────────────────────────────────────────── */}
+      <AnimatePresence>
+        {isInGame && (
+          <motion.button
+            key="fab-home"
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            onClick={handleChangeArea}
+            className="fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[60] flex items-center gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-full bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 hover:border-zinc-500 shadow-[0_4px_25px_rgba(0,0,0,0.5)] transition-all hover:scale-105 active:scale-95 group"
+            title="หน้าแรก / เปลี่ยนพื้นที่"
+          >
+            <HomeIcon className="w-5 h-5 text-zinc-300 group-hover:text-amber-400 transition-colors" />
+            <span className="font-bold text-sm text-zinc-200 hidden sm:inline-block">
+              กลับหน้าแรก
+            </span>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* ── Slip reveal overlay ──────────────────────────────────────────── */}
       <SlipReveal

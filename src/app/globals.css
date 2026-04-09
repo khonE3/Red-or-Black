@@ -1,13 +1,18 @@
 @import "tailwindcss";
 
+@theme {
+    --font-sans: var(--font-inter), system-ui, sans-serif;
+    --font-thai: var(--font-noto-thai), var(--font-inter), system-ui, sans-serif;
+}
+
 /* ─── CSS custom properties ─────────────────────────────────────────────────── */
 :root {
     --background: #09090b;
     --foreground: #f4f4f5;
     --red-glow: rgba(220, 38, 38, 0.4);
     --gold-glow: rgba(245, 158, 11, 0.3);
-    --card-bg: rgba(24, 24, 27, 0.85);
-    --border-subtle: rgba(63, 63, 70, 0.5);
+    --card-bg: rgba(24, 24, 27, 0.7);
+    --border-subtle: rgba(255, 255, 255, 0.08);
 }
 
 /* ─── Base reset & dark theme ────────────────────────────────────────────────── */
@@ -25,15 +30,15 @@ html {
 body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family:
-        var(--font-geist-sans),
-        system-ui,
-        -apple-system,
-        sans-serif;
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     min-height: 100dvh;
+}
+
+.font-thai {
+    font-family: var(--font-thai);
 }
 
 /* ─── Custom scrollbar ───────────────────────────────────────────────────────── */
