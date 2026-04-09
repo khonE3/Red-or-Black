@@ -1,0 +1,292 @@
+@import "tailwindcss";
+
+/* ─── CSS custom properties ─────────────────────────────────────────────────── */
+:root {
+    --background: #09090b;
+    --foreground: #f4f4f5;
+    --red-glow: rgba(220, 38, 38, 0.4);
+    --gold-glow: rgba(245, 158, 11, 0.3);
+    --card-bg: rgba(24, 24, 27, 0.85);
+    --border-subtle: rgba(63, 63, 70, 0.5);
+}
+
+/* ─── Base reset & dark theme ────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family:
+        var(--font-geist-sans),
+        system-ui,
+        -apple-system,
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    min-height: 100dvh;
+}
+
+/* ─── Custom scrollbar ───────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #18181b;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #dc2626;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #3f3f46 #18181b;
+}
+
+/* ─── Text selection ─────────────────────────────────────────────────────────── */
+::selection {
+    background-color: rgba(220, 38, 38, 0.35);
+    color: #fef2f2;
+}
+
+::-moz-selection {
+    background-color: rgba(220, 38, 38, 0.35);
+    color: #fef2f2;
+}
+
+/* ─── Focus ring ─────────────────────────────────────────────────────────────── */
+:focus-visible {
+    outline: 2px solid rgba(220, 38, 38, 0.7);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ─── Tap highlight (mobile) ─────────────────────────────────────────────────── */
+* {
+    -webkit-tap-highlight-color: rgba(220, 38, 38, 0.15);
+}
+
+/* ─── Utility: glassmorphism card ─────────────────────────────────────────────── */
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+}
+
+/* ─── Utility: red glow text ─────────────────────────────────────────────────── */
+.text-glow-red {
+    text-shadow:
+        0 0 20px rgba(220, 38, 38, 0.8),
+        0 0 40px rgba(220, 38, 38, 0.4);
+}
+
+.text-glow-gold {
+    text-shadow:
+        0 0 20px rgba(245, 158, 11, 0.8),
+        0 0 40px rgba(245, 158, 11, 0.4);
+}
+
+/* ─── Utility: box glow ──────────────────────────────────────────────────────── */
+.glow-red {
+    box-shadow:
+        0 0 30px rgba(220, 38, 38, 0.3),
+        0 0 60px rgba(220, 38, 38, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.glow-gold {
+    box-shadow:
+        0 0 30px rgba(245, 158, 11, 0.25),
+        0 0 60px rgba(245, 158, 11, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Keyframes: slip float animations (used inline in BucketScene SVG) ───────── */
+@keyframes slipFloat0 {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-2.5px);
+    }
+}
+
+@keyframes slipFloat1 {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes slipFloat2 {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes slipFloat3 {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-1.5px);
+    }
+}
+
+/* ─── Keyframes: particle rise (AtmosphereParticles) ─────────────────────────── */
+@keyframes particleRise {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.18;
+    }
+    70% {
+        transform: translateY(-140px) scale(1.2);
+        opacity: 0.18;
+    }
+    100% {
+        transform: translateY(-200px) scale(0);
+        opacity: 0;
+    }
+}
+
+/* ─── Keyframes: pulse ring (draw button) ────────────────────────────────────── */
+@keyframes pulseRing {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(1.35);
+        opacity: 0;
+    }
+}
+
+/* ─── Keyframes: shimmer (loading skeleton) ──────────────────────────────────── */
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #27272a 25%, #3f3f46 50%, #27272a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+    border-radius: 6px;
+}
+
+/* ─── Keyframes: screen flash overlay ───────────────────────────────────────── */
+@keyframes screenFlash {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.22;
+    }
+    60% {
+        opacity: 0.08;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* ─── Keyframes: number count-up flicker ────────────────────────────────────── */
+@keyframes countFlicker {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* ─── Keyframes: dramatic entrance for slip reveal ───────────────────────────── */
+@keyframes slipDrop {
+    0% {
+        transform: translateY(-60px) scale(0.85) rotateX(25deg);
+        opacity: 0;
+    }
+    60% {
+        transform: translateY(6px) scale(1.03) rotateX(-3deg);
+        opacity: 1;
+    }
+    80% {
+        transform: translateY(-3px) scale(0.99) rotateX(1deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0) scale(1) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+/* ─── Keyframes: military badge rotate ──────────────────────────────────────── */
+@keyframes badgeSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ─── Keyframes: countdown ring depletion ───────────────────────────────────── */
+@keyframes ringDrain {
+    from {
+        stroke-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: 220;
+    }
+}
+
+/* ─── Responsive: reduce motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ─── Print: hide decorative elements ───────────────────────────────────────── */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
