@@ -67,3 +67,56 @@ export const playClick = () => {
     }
   };
   
+  export const playRedCard = () => {
+    try {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContext) return;
+      const audioCtx = new AudioContext();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+  
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+  
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
+      osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.8);
+  
+      gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+  
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+  
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.8);
+    } catch (e) {
+      console.warn("Audio play failed", e);
+    }
+  };
+  
+  export const playBlackCard = () => {
+    try {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContext) return;
+      const audioCtx = new AudioContext();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+  
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+  
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, audioCtx.currentTime); 
+      osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.5); 
+  
+      gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+  
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+  
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.8);
+    } catch (e) {
+      console.warn("Audio play failed", e);
+    }
+  };

@@ -1,6 +1,6 @@
 "use client";
 
-import { playShake, playClick } from "@/utils/audio";
+import { playShake, playClick, playRedCard, playBlackCard } from "@/utils/audio";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -320,6 +320,9 @@ export default function Home() {
     setShowReveal(true);
     setPhase("revealing");
     isDrawingRef.current = false;
+
+    if (type === "red") playRedCard();
+    else playBlackCard();
 
     // Record to API (fire-and-forget)
     fetch("/api/draw", {
