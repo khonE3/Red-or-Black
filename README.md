@@ -4,7 +4,7 @@
 > สำหรับการศึกษาและทำความเข้าใจกระบวนการสุ่มเกณฑ์ทหารอย่างโปร่งใส
 
 ---
-
+https://red-or-black-gacha.vercel.app/
 ## 📌 ภาพรวมโปรเจกต์
 
 **Red or Black Destiny** คือแอปพลิเคชันจำลองการเกณฑ์ทหาร (Military Conscription Simulation) ที่ช่วยให้ผู้ใช้สามารถ:
